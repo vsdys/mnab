@@ -17,3 +17,23 @@ exports.getArticles = async (req, res) => {
   console.log('Fetched articles:', data);
   res.json(data);
 };
+
+exports.getArticlesByCategory = async (req, res) => {
+  const { category } = req.params;
+
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('category', category); // Filters by category column
+
+  if (error) {
+    console.error('Error fetching filtered articles:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+
+  if (!data || data.length === 0) {
+    return res.status(404).json({ message: 'No articles found for this category' });
+  }
+
+  res.json(data);
+};
