@@ -45,7 +45,7 @@ exports.getArticleById = async (req, res) => {
     .from('articles')
     .select('*')
     .eq('id', id)
-    .single(); // only return 1 row
+    .single(); // Get exactly one record
 
   if (error) {
     console.error('Error fetching article by ID:', error.message);
@@ -53,8 +53,9 @@ exports.getArticleById = async (req, res) => {
   }
 
   if (!data) {
-    return res.status(404).json({ message: 'Article not found' });
+    return res.status(404).json({ error: 'Article not found' });
   }
 
   res.json(data);
 };
+
