@@ -37,3 +37,24 @@ exports.getArticlesByCategory = async (req, res) => {
 
   res.json(data);
 };
+
+exports.getArticleById = async (req, res) => {
+  const { id } = req.params;
+
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('id', id)
+    .single(); // only return 1 row
+
+  if (error) {
+    console.error('Error fetching article by ID:', error.message);
+    return res.status(500).json({ error: error.message });
+  }
+
+  if (!data) {
+    return res.status(404).json({ message: 'Article not found' });
+  }
+
+  res.json(data);
+};
